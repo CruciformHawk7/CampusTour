@@ -1,0 +1,121 @@
+<html>
+    <head>
+        <!-- DO NOT REMOVE ANY COMMENTS -->
+        <style>
+        .headerItem {
+            position: absolute; 
+            width: 20%; 
+            border-width: 2px; 
+            border-color: black; 
+            border-style: solid; 
+            background-color:  #5ea3b3;
+        }
+        .bodyItem {
+            position: absolute; 
+            width: 20%; 
+            border-width: 1px; 
+            border-color: black; 
+            border-style: solid; 
+        }
+        .removeButton {
+            
+            margin-left: 80%;
+        }
+        </style>
+
+        <script src="./lokisrc/lokijs.js"></script>
+        <script type="text/javascript">
+            var db = new loki("testdb.json");
+            var counter = 0;
+            function LoadOperations() {
+                var recs = db.addCollection("recs");
+                recs.insert({ID:1, Target:2, Direction:"North", Asset:"1.jpg"});
+                recs.insert({ID:1, Target:2, Direction:"North", Asset:"1.jpg"});
+                console.log(recs);
+                var result = recs.get(1);
+                db.saveDatabase();
+            }
+
+            function updateRecords() {
+                LoadOperations();
+                //var recs = db.getCollection('recs');
+                // console.log(recs);
+                // console.log(recs.data.length);
+                // LoadOperations();
+                // console.log(recs.data.length);
+            }
+            function addRecord() {
+                var p = document.getElementById('TableBody');
+                var div = document.createElement('div');
+                div.innerHTML = '<div id="content1" style="margin-top: 0px">' + 
+                    '<div class="bodyItem">1</div> ' + 
+                    '<div class="bodyItem" style="left: 20%">2</div> ' + 
+                    '<div class="bodyItem" style="left: 40%">North</div>' + 
+                    '<div class="bodyItem" style="left: 60%">' + counter + '.jpg</div>' +
+                    '</div>' + 
+                    '<input id="Button' + counter + '" type="button" value="Delete" class="removeButton" onclick ="RemoveElement(this)"></input>';
+                counter++;
+                p.appendChild(div);
+            }
+            function RemoveElement(div)
+            {
+                document.getElementById("TableBody").removeChild(div.parentNode);
+                counter--;
+            }
+        </script>
+    </head>
+    <body onload="updateRecords()">
+        <div id="MainContainer" style="position: absolute; width: 800px">
+            <!-- Header -->
+            <input type="button" name="btnAddRecord" onclick="addRecord()" value="Add Record"></input>
+            <div id="Heading" style="position: absolute; width: 500px; height: 25px;  text-align: center">
+                <div class="headerItem">
+                    ID
+                </div>
+                <div class="headerItem" style="left:20%">
+                    Target
+                </div>
+                <div class="headerItem" style="left:40%">
+                    Direction
+                </div>
+                <div class="headerItem" style="left:60%">
+                    Asset
+                </div>
+            </div>
+            <!-- Table Contents -->
+            <div id="TableBody" style="position: absolute; width: 500px; margin-top: 22px; text-align: center; left: 1px">
+                <!-- 
+                <div id="content1" style="margin-top: 0px">
+                    <div class="bodyItem">
+                        1
+                    </div>
+                    <div class="bodyItem" style="left: 25%">
+                        2
+                    </div>
+                    <div class="bodyItem" style="left: 50%">
+                        North
+                    </div>
+                    <div class="bodyItem" style="left: 75%">
+                        1.jpg
+                    </div> 
+                </div>
+                <div id="content2" style="margin-top: 20px">
+                    <div class="bodyItem">
+                        1
+                    </div>
+                    <div class="bodyItem" style="left: 25%">
+                        3
+                    </div>
+                    <div class="bodyItem" style="left: 50%">
+                        South
+                    </div>
+                    <div class="bodyItem" style="left: 75%">
+                        2.jpg
+                    </div> 
+                </div>
+                -->
+            </div>
+            
+        </div>
+    </body>
+</html>

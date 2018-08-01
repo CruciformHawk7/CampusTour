@@ -1,0 +1,173 @@
+<html>
+    <head>
+        <!-- DO NOT REMOVE ANY COMMENTS -->
+        <style>
+        .headerItem {
+            position: absolute; 
+            width: 20%; 
+            border-width: 2px; 
+            border-color: black; 
+            border-style: solid; 
+            background-color:  #5ea3b3;
+        }
+        .bodyItem {
+            position: absolute; 
+            width: 20%; 
+            border-width: 1px; 
+            border-color: black; 
+            border-style: solid; 
+        }
+        .removeButton {
+            
+            margin-left: 100%;
+        }
+        </style>
+
+        <script src="./lokisrc/lokijs.js"></script>
+        <script type="text/javascript">
+            var db = new loki("./testdb.json");
+            var counter = 0;
+            function updateRecords() {
+                loadCollection('recs', function (recs) {
+                console.log(recs.data);
+                var newRecords = { ID:1, Target:2, Direction:"North", Asset:"1.jpg" };
+                recs.insert(newRecords);
+                console.log("New Record", newRecords);
+                db.saveDatabase(function(err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        console.log("saved");
+                    }
+                    });
+                });
+            }
+
+            function loadCollection(colName, callback) {
+                db.loadDatabase({}, function () {
+                    var _collection = db.getCollection(colName);
+
+                    if (!_collection) {
+                        console.log("Collection %s does not exit.", colName);
+                        _collection = db.addCollection('recs');
+                    }
+
+                    callback(_collection);
+                });
+            }
+
+            function addRecord() {
+                var a1 = document.getElementById("ID").value;
+                var a2 = document.getElementById("Target").value;
+                var a3n = document.getElementById("mySelect").value;
+                // use a3n if you want index based select results. 
+                var sel = document.getElementById("mySelect"); 
+                var a3 = sel.options[sel.selectedIndex].text;
+                //use a3 if you want the text as-is
+                var a4 = document.getElementById("Asset").value;
+                if(a1=="" || a1==null||a2==""||a2==null||a3==""||a3==null||a4==""||a4==null)
+                {
+                    alert("One of the values missing!");
+                }
+                else      
+                {     
+                    var p = document.getElementById('TableBody');
+                    var div = document.createElement('div');
+                    div.innerHTML = '<div id="content1" style="margin-top: 0px">' + 
+                        '<div class="bodyItem">' + a1 + '</div> ' + 
+                        '<div class="bodyItem" style="left: 20%">' + a2 +'</div> ' + 
+                        '<div class="bodyItem" style="left: 40%">' + a3 + '</div>' + 
+                        '<div class="bodyItem" style="left: 60%">' + a4 + '.jpg</div>' +
+                        '<div class="bodyItem" style="left: 80%">' + counter + '</div>' +
+                        '</div>' + 
+                        '<input id="Button' + counter + '"type="button" value="Delete"' + 
+                        ' class="removeButton" onclick ="RemoveElement(this)"></input>';
+                    counter++;
+                    p.appendChild(div);                
+                }    
+            }
+            function RemoveElement(div)
+            {
+                document.getElementById("TableBody").removeChild(div.parentNode);
+                counter--;
+            }
+        </script>
+    </head>
+    <body onload="updateRecords()">
+        <div id="MainContainer" style="position: absolute; width: 800px">
+            <div id="Controls" style="position: absolute; width: 500px">
+                    <input type="text" style="position: absolute; width: 19%" placeholder="ID" id="ID"></input>
+                    <input type="text" style="position: absolute; left: 20%; width: 19%" placeholder="Target" id="Target"></input>          
+                    <select id="mySelect" style="position: absolute; left: 40%; width: 19%; height: 21px">
+                        <option value="" disabled selected>Direction</option>
+                        <option value="0">North</option>
+                        <option value="1">North-East</option>
+                        <option value="2">East</option>
+                        <option value="3">South-East</option>
+                        <option value="4">South</option>
+                        <option value="5">South-West</option>
+                        <option value="6">West</option>
+                        <option value="7">North-West</option>
+                    </select>
+                    <input type="text" placeholder="Asset" id="Asset" style="position: absolute; left: 60%; width: 19%"></input>
+                    <input type="button" name="btnAddRecord" onclick="addRecord()" value="Add Record" 
+                        style="position: absolute; left: 80%; width: 19%"></input>
+            </div>
+            <br>
+            <br>
+            <!-- Header --> 
+            <div id="Heading" style="position: absolute; width: 500px; height: 25px;  text-align: center">
+                <div class="headerItem">
+                    ID
+                </div>
+                <div class="headerItem" style="left:20%">
+                    Target
+                </div>
+                <div class="headerItem" style="left:40%">
+                    Direction
+                </div>
+                <div class="headerItem" style="left:60%">
+                    Asset
+                </div>
+                <div class="headerItem" style="left:80%">
+                    Counter
+                </div>
+            </div>
+            <!-- Table Contents -->
+            <div id="TableBody" style="position: absolute; width: 500px; margin-top: 22px; text-align: center; left: 1px">
+                <!-- 
+                <div id="content1" style="margin-top: 0px">
+                    <div class="bodyItem">
+                        1
+                    </div>
+                    <div class="bodyItem" style="left: 25%">
+                        2
+                    </div>
+                    <div class="bodyItem" style="left: 50%">
+                        North
+                    </div>
+                    <div class="bodyItem" style="left: 75%">
+                        1.jpg
+                    </div> 
+                </div>
+                <div id="content2" style="margin-top: 20px">
+                    <div class="bodyItem">
+                        1
+                    </div>
+                    <div class="bodyItem" style="left: 25%">
+                        3
+                    </div>
+                    <div class="bodyItem" style="left: 50%">
+                        South
+                    </div>
+                    <div class="bodyItem" style="left: 75%">
+                        2.jpg
+                    </div> 
+                </div>
+                -->
+            </div>
+            
+        </div>
+    </body>
+</html>
