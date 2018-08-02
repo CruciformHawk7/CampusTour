@@ -13,14 +13,14 @@ const DEFAULT_ANIMATION_BUTTON_RADIUS = 50;
 const DEFAULT_ANIMATION_BUTTON_SIZE = 0.05;
 
 var Directions = {
-  North : [0,0,0],
-  NorthEast : [0,0,0],
-  East : [0,0,0],
-  SouthEast : [0,0,0],
-  South : [0,0,0],
-  SouthWest : [0,0,0],
-  West:[0,0,0],
-  NorthWest:[0,0,0]
+  North :       [0,0,0],
+  NorthEast :   [0,0,0],
+  East :        [0,0,0],
+  SouthEast :   [0,0,0],
+  South :       [0,0,0],
+  SouthWest :   [0,0,0],
+  West:         [0,0,0],
+  NorthWest:    [0,0,0]
 };
 
 const rotate = [90,0,0];
@@ -30,7 +30,14 @@ class CampusTour extends React.Component {
   constructor (props) {
     super(props);
     this.state =  {
-      scenes: [{scene_image: 'initial.jpg', step: 1, navigations: [{step:2, translate: [0.73,-0.15,0.66], rotation: rotate }] },
+      scenes: [{scene_image: 'entrance.jpg', step: 1, navigations: [{step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
+                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
+                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
+                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
+                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
+                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
+                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
+                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate }] },
                {scene_image: 'step1.jpg', step: 2, navigations: [{step:3, translate: [-0.43,-0.01,0.9], rotation: rotate }]},
                {scene_image: 'step2.jpg', step: 3, navigations: [{step:4, translate: [-0.4,0.05,-0.9], rotation: rotate }]},
                {scene_image: 'step3.jpg', step: 4, navigations: [{step:5, translate: [-0.55,-0.03,-0.8], rotation: rotate }]},
@@ -90,23 +97,6 @@ class CampusTour extends React.Component {
       this.state.animationRadius = DEFAULT_ANIMATION_BUTTON_RADIUS;
       this.animatePointer();
     }
-  }
-
-  rotatePointer(nativeEvent){
-      switch (nativeEvent.keyCode) {
-        case 38:
-          this.state.current_scene.navigations[0]['rotation'][1] += 4;
-        break;
-        case 39:
-          this.state.current_scene.navigations[0]['rotation'][0] += 4;
-        break;
-        case 40:
-          this.state.current_scene.navigations[0]['rotation'][2] += 4;
-        break;
-        default:
-        return;
-      }
-      this.forceUpdate();
   }
 
   animatePointer(){
