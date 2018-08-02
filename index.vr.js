@@ -13,14 +13,14 @@ const DEFAULT_ANIMATION_BUTTON_RADIUS = 50;
 const DEFAULT_ANIMATION_BUTTON_SIZE = 0.05;
 
 var Directions = {
-  North :       [0,0,0],
-  NorthEast :   [0,0,0],
-  East :        [0,0,0],
-  SouthEast :   [0,0,0],
-  South :       [0,0,0],
-  SouthWest :   [0,0,0],
-  West:         [0,0,0],
-  NorthWest:    [0,0,0]
+  North :       [0, -0.25, -0.75],
+  NorthEast :   [0.55,-0.25, -0.55],
+  East :        [0.75,-0.25,0],
+  SouthEast :   [0.55,-0.25,0.55],
+  South :       [0, -0.25, 0.75],
+  SouthWest :   [-0.55,-0.25,0.55],
+  West:         [-0.75,-0.25,0],
+  NorthWest:    [-0.55,-0.25,-0.55]
 };
 
 const rotate = [90,0,0];
@@ -29,19 +29,34 @@ class CampusTour extends React.Component {
 
   constructor (props) {
     super(props);
+    //var prep = getFromDB();
+    //scenes: prep; //add PG
     this.state =  {
-      scenes: [{scene_image: 'entrance.jpg', step: 1, navigations: [{step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
-                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
-                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
-                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
-                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
-                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
-                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate },
-                                                                  {step:2, translate: [0.73,-0.15,0.66], rotation: rotate }] },
-               {scene_image: 'step1.jpg', step: 2, navigations: [{step:3, translate: [-0.43,-0.01,0.9], rotation: rotate }]},
-               {scene_image: 'step2.jpg', step: 3, navigations: [{step:4, translate: [-0.4,0.05,-0.9], rotation: rotate }]},
-               {scene_image: 'step3.jpg', step: 4, navigations: [{step:5, translate: [-0.55,-0.03,-0.8], rotation: rotate }]},
-               {scene_image: 'step4.jpg', step: 5, navigations: [{step:1, translate: [0.2,-0.03,-1], rotation: rotate }]}],
+      scenes: [{scene_image: 'Entrance.jpg', step: 1, navigations: [{step:2, translate: Directions.West, rotation: rotate },
+                                                                    {step:3, translate: Directions.SouthWest, rotation: rotate },
+                                                                    {step:10, translate: Directions.East, rotation: rotate }] },
+               {scene_image: 'Quadrangle.jpg', step: 2, navigations: [{step:1, translate: Directions.NorthEast, rotation: rotate },
+                                                                    {step:3, translate: Directions.East, rotation: rotate },
+                                                                    {step:4, translate: Directions.West, rotation: rotate }]},
+               {scene_image: 'Hostel.jpg', step: 3, navigations: [{step:2, translate: Directions.SouthEast, rotation: rotate },
+                                                                  {step:1, translate: Directions.West, rotation: rotate }]},
+               {scene_image: 'M0.jpg', step: 4, navigations: [{step:8, translate: Directions.West, rotation: rotate },
+                                                              {step:5, translate: Directions.East, rotation: rotate }]},
+               {scene_image: 'M2.jpg', step: 5, navigations: [{step:6, translate: Directions.NorthEast, rotation: rotate },
+                                                              {step:7, translate: Directions.North, rotation: rotate },
+                                                              {step:4, translate: Directions.NorthWest, rotation: rotate }]},
+               {scene_image: 'M2I.jpg', step: 6, navigations: [{step:5, translate: Directions.East, rotation: rotate }]},
+               {scene_image: 'M3.jpg', step: 7, navigations: [{step:5, translate: Directions.South, rotation: rotate },
+                                                              {step:9, translate: Directions.West, rotation: rotate }]},
+               {scene_image: 'Ground.jpg', step: 8, navigations: [{step:4, translate: Directions.NorthWest, rotation: rotate }]},
+               {scene_image: 'M3I.jpg', step: 9, navigations: [{step:7, translate: Directions.North, rotation: rotate }]},
+               {scene_image: 'PGEntrance.jpg', step: 10, navigations: [{step:1, translate: Directions.NorthWest, rotation: rotate },
+                                                                        {step:11, translate: Directions.South, rotation: rotate }]},
+               {scene_image: 'PGQuadrangle.jpg', step: 11, navigations: [{step:10, translate: Directions.NorthWest, rotation: rotate },
+                                                                          {step:12, translate: Directions.West, rotation: rotate },
+                                                                          {step:13, translate: Directions.SouthWest, rotation: rotate }]},
+               {scene_image: 'PGCanteen.jpg', step: 12, navigations: [{step:11, translate: Directions.East, rotation: rotate }]},
+               {scene_image: 'PG1.jpg', step: 13, navigations: [{step:11, translate: Directions.South, rotation: rotate }]}],
       current_scene:{},
       animationWidth: DEFAULT_ANIMATION_BUTTON_SIZE,
       animationRadius: DEFAULT_ANIMATION_BUTTON_RADIUS
@@ -82,9 +97,9 @@ class CampusTour extends React.Component {
   }
 
   onPanoInput(e){
-    if (e.nativeEvent.inputEvent.eventType === 'keydown'){
-      this.rotatePointer(e.nativeEvent.inputEvent)
-    }
+    // if (e.nativeEvent.inputEvent.eventType === 'keydown'){
+    //   this.rotatePointer(e.nativeEvent.inputEvent)
+    // }
   }
 
   onNavigationClick(item,e){

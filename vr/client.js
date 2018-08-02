@@ -18,7 +18,7 @@ function init(bundle, parent, options) {
   vr.start();
   window.playerCamera = vr.player._camera;
   window.vr = vr;
-  window.ondblclick= onRendererDoubleClick;
+  // window.ondblclick= onRendererDoubleClick;
   window.onmousewheel = onRendererMouseWheel;
   vr.rootView.context.worker.addEventListener('message', onVRMessage);
   return vr;
@@ -45,12 +45,12 @@ function onVRMessage(e) {
   }
 }
 
-function onRendererDoubleClick(){
-  var x  = 2 * (event.x / window.innerWidth) - 1;
-  var y = 1 - 2 * ( event.y / window.innerHeight );
-  var coordinates = get3DPoint(window.playerCamera, x, y);
-  vr.rootView.context.worker.postMessage({ type: "newCoordinates", coordinates: coordinates });
-}
+// function onRendererDoubleClick(){
+//   var x  = 2 * (event.x / window.innerWidth) - 1;
+//   var y = 1 - 2 * ( event.y / window.innerHeight );
+//   var coordinates = get3DPoint(window.playerCamera, x, y);
+//   vr.rootView.context.worker.postMessage({ type: "newCoordinates", coordinates: coordinates });
+// }
 
 function onRendererMouseWheel(){
   if (event.deltaY > 0 ){
