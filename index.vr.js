@@ -13,6 +13,17 @@ const DEFAULT_ANIMATION_BUTTON_RADIUS = 50;
 const DEFAULT_ANIMATION_BUTTON_SIZE = 0.05;
 
 var Directions = {
+  North :       [0,     -0.4,   -1],
+  NorthEast :   [0.7,   -0.4,   -0.7],
+  East :        [1,     -0.4,   0],
+  SouthEast :   [0.7,   -0.4,   0.7],
+  South :       [0,     -0.4,   1],
+  SouthWest :   [-0.7,  -0.4,   0.7],
+  West:         [-1,    -0.4,   0],
+  NorthWest:    [-0.7,  -0.4,   -0.7]
+};
+
+var _Directions = {
   North :       [0, -0.25, -0.75],
   NorthEast :   [0.55,-0.25, -0.55],
   East :        [0.75,-0.25,0],
