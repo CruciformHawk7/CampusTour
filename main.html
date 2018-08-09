@@ -24,24 +24,26 @@
         </style>
 
         <script src="./lokisrc/lokijs.js"></script>
+        <script src="./FileSaver/FileSaver.min.js"></script>
         <script type="text/javascript">
-            var db = new loki("./testdb.json");
+            var db= new loki('testdb.json');
             var recs;
             var counter = 0;
+
             function updateRecords() {
                 loadCollection('recs', function (recs) {
-                //console.log(recs.data);
                 this.recs = recs;
                 console.log(recs.data);
                 recs.data.forEach(element => {
                     addRecrd(element.ID, element.Target, element.Direction, element.Asset, element.$loki);
                 });
-                //var newRecords = { ID:1, Target:2, Direction:"North", Asset:"1.jpg" };
-                //recs.insert(newRecords);
+                // var newRecords = [ { ID:1, Target:2, Direction:"North", Asset:"1.jpg" },
+                //                     { ID:1, Target:2, Direction:"North", Asset:"1.jpg"},
+                //                     {ID:1, Target:2, Direction:"North", Asset:"1.jpg"}];
+                // recs.insert(newRecords);
                 //console.log("New Record", newRecords);
                 savedb();
                 });
-                //getRidOfDb();
             }
 
             function loadCollection(colName, callback) {
@@ -82,22 +84,22 @@
                 var a3 = sel.options[sel.selectedIndex].text;
                 //use a3 if you want the text as-is
                 var a4 = document.getElementById("Asset").value;
-                if(a1=="" || a1==null||a2==""||a2==null||a3==""||a3==null||a4==""||a4==null)
+                if(a1=="" || a1==null||a2==""||a2==null||a3=="Direction"||a3==null||a4==""||a4==null)
                 {
                     alert("One of the values missing!");
                 }
                 else      
                 {
-                    var newRecords = { ID:a1, Target:a2, Direction:a3, Asset:a4};
+                    var newRecords = { ID:a1, Target:a2, Direction:a3n, Asset:a4};
                     var lok = recs.insert(newRecords).$loki;
-                    //var lok = recs.chain().find({ID:a1, Target:a2, Direction:a3, Asset:a4}).$loki;
                     console.log(a1 + " " + lok);
+                    console.log(recs.data);
                     var p = document.getElementById('TableBody');
                     var div = document.createElement('div');
                     div.innerHTML = '<div id="content1" style="margin-top: 0px">' + 
                         '<div class="bodyItem">' + a1 + '</div> ' + 
                         '<div class="bodyItem" style="left: 20%">' + a2 +'</div> ' + 
-                        '<div class="bodyItem" style="left: 40%">' + a3 + '</div>' + 
+                        '<div class="bodyItem" style="left: 40%">' + a3n + '</div>' + 
                         '<div class="bodyItem" style="left: 60%">' + a4 + '</div>' +
                         '<div class="bodyItem" style="left: 80%">' + lok + '</div>' +
                         '</div>' + 
@@ -105,7 +107,7 @@
                         'class="removeButton" onclick ="RemoveElement(this, ' +  lok + ')"></input>';
                     counter++;
                     p.appendChild(div); 
-                    savedb();               
+                    savedb();   
                 }    
             }
             function RemoveElement(div, counr) {
@@ -134,8 +136,47 @@
                     console.log("Deleted");
                     console.log(recs.data);
                     savedb();
-                    window.location.reload();
+                    updateRecords();
                 }
+            }
+
+            function ExportDB() {
+                    savedb();
+                    var text = "[";
+                    loadCollection('recs', function (recs) {
+                        this.recs = recs;
+                        console.log(recs.data);
+                        recs.data.forEach(element => {
+                            text += "\n\t{";
+                            text += "\n\t\"ID\": " + element.ID;
+                            text += ",\n\t\"Target\": " + element.Target;
+                            text += ",\n\t\"Direction\": " + element.Direction;
+                            text += ",\n\t\"Asset\": " + element.Asset;
+                            text += "\n\t},";
+                        });
+                    text = text.substring(0, text.length - 1);
+                    text += "\n]";
+                    });
+                    var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+                    saveAs(blob, "ExportedValues" + ".json");
+            }
+
+            function ImportDB() {
+                //alert
+                var fileToLoad = document.getElementById("fileToLoad").files[0];
+                var textFromFileLoaded;
+                var objs;
+                var fileReader = new FileReader();
+                fileReader.readAsText(fileToLoad, "UTF-8");
+                fileReader.onload = function(fileLoadedEvent){
+                    textFromFileLoaded = fileLoadedEvent.target.result;
+                    //console.log(textFromFileLoaded);
+                    objs = JSON.parse(textFromFileLoaded);
+                    getRidOfDb();
+                console.log(objs);
+                recs.insert(objs);
+                savedb();
+                };
             }
         </script>
     </head>
@@ -159,10 +200,16 @@
                     <input type="button" name="btnAddRecord" onclick="addRecord()" value="Add Record" 
                         style="position: absolute; left: 80%; width: 19%"></input>
             </div>
-            <br><br>
+            <br><br>    
             <div id="Controls2" style="position: absolute; width: 500px">
                 <input type="button" style="position: absolute; width: 25%" id="ClearDB" onclick="getRidOfDb()"
                  value="Clear Database"/>
+                <input type="button" style="position: absolute; width: 25%; margin-left: 26.33%" id="ExportDB" onclick="ExportDB()" 
+                 value="Export Database"/>
+                <input type="file"  style="position: absolute; width: 50%; margin-left: 52.66%" id="fileToLoad" accept=".json">
+                </input>
+                <input type="button" style="position: absolute; width: 25%; margin-left: 103.99%" onclick="ImportDB()" 
+                 multiple="false" value="Implement"/>
             </div>
             <br>
             <br>
